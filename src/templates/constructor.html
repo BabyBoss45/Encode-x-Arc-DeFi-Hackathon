@@ -537,10 +537,14 @@
                         salaryChangeArrow.className = 'arrow neutral';
                     }
                     
-                    // Show delete button if worker ID exists
+                    // Show delete button - always visible
                     const deleteBtn = document.getElementById('modalDeleteWorkerBtn');
                     if (deleteBtn) {
-                        deleteBtn.style.display = workerId ? 'block' : 'none';
+                        deleteBtn.style.display = 'block';
+                        deleteBtn.style.visibility = 'visible';
+                        if (workerId) {
+                            deleteBtn.setAttribute('data-worker-id', workerId);
+                        }
                     }
                     
                     // Show modal
@@ -550,18 +554,34 @@
                     void backdrop.offsetHeight;
                     backdrop.classList.add('active');
                     modal.classList.add('active');
+                    
+                    // Ensure backdrop can receive clicks
+                    backdrop.style.pointerEvents = 'auto';
+                    
+                    // Setup backdrop click handler
+                    setupBackdropClick();
                 }
                 
                 // Delete worker from modal
                 async function deleteWorkerFromModal() {
-                    if (!currentWorkerId) return;
+                    // Get worker ID from currentWorkerId or from button attribute
+                    let workerId = currentWorkerId;
+                    const deleteBtn = document.getElementById('modalDeleteWorkerBtn');
+                    if (!workerId && deleteBtn) {
+                        workerId = deleteBtn.getAttribute('data-worker-id');
+                    }
+                    
+                    if (!workerId) {
+                        alert('Worker ID not found');
+                        return;
+                    }
                     
                     if (!confirm('Are you sure you want to delete this worker?')) {
                         return;
                     }
                     
                     try {
-                        const response = await fetch(`/constructor/worker/${currentWorkerId}/delete`, {
+                        const response = await fetch(`/constructor/worker/${workerId}/delete`, {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',
@@ -572,11 +592,12 @@
                             hideWorkerModal();
                             window.location.reload();
                         } else {
-                            alert('Failed to delete worker');
+                            const errorText = await response.text();
+                            alert('Failed to delete worker: ' + errorText);
                         }
                     } catch (error) {
                         console.error('Error deleting worker:', error);
-                        alert('Error deleting worker');
+                        alert('Error deleting worker: ' + error.message);
                     }
                 }
                 
@@ -596,37 +617,38 @@
                 }
                 
                 // Setup event listeners when DOM is ready
-                (function() {
+                document.addEventListener('DOMContentLoaded', function() {
                     const modal = document.getElementById('workerModal');
                     const backdrop = document.getElementById('workerModalBackdrop');
                     
                     if (modal && backdrop) {
-                        // Close when clicking on backdrop (outside modal)
-                        backdrop.addEventListener('click', (e) => {
-                            if (e.target === backdrop) {
+                        // Close when clicking on backdrop (blurred background)
+                        backdrop.addEventListener('click', function(e) {
+                            // Close if clicking on backdrop itself (not on modal or its children)
+                            if (e.target === backdrop || e.target === this) {
                                 hideWorkerModal();
                             }
                         });
                         
                         // Prevent modal from closing when clicking inside it
-                        modal.addEventListener('click', (e) => {
+                        modal.addEventListener('click', function(e) {
                             e.stopPropagation();
                         });
                     }
-                    
-                    // Close modal when clicking anywhere outside (document click)
-                    document.addEventListener('click', (e) => {
-                        const modal = document.getElementById('workerModal');
-                        const backdrop = document.getElementById('workerModalBackdrop');
-                        
-                        if (modal && backdrop && backdrop.style.display === 'flex') {
-                            // Check if click is outside both modal and backdrop
-                            if (!modal.contains(e.target) && !backdrop.contains(e.target)) {
+                });
+                
+                // Setup backdrop click handler when modal is shown
+                function setupBackdropClick() {
+                    const backdrop = document.getElementById('workerModalBackdrop');
+                    if (backdrop) {
+                        // Use onclick for more reliable event handling
+                        backdrop.onclick = function(e) {
+                            if (e.target === backdrop) {
                                 hideWorkerModal();
                             }
-                        }
-                    });
-                })();
+                        };
+                    }
+                }
                 
                 // Toggle form sections
                 function toggleFormSection(sectionId) {
@@ -675,6 +697,9 @@
                                 <span class="salary-change" id="modalSalaryChange">0%</span>
                             </span>
                         </div>
+                    </div>
+                    <div class="modal-actions">
+                        <button class="btn btn-danger" id="modalDeleteWorkerBtn" onclick="deleteWorkerFromModal(); event.stopPropagation();">Delete Worker</button>
                     </div>
                 </div>
             </div>

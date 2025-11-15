@@ -48,28 +48,28 @@
                 <!-- Right Panel: Stats Grid, Revenues and Expenses -->
                 <div class="dashboard-right-panel">
                     <div class="stats-grid">
-                        <div class="stat-card">
+                        <div class="stat-card" data-icon="workers">
                             <div class="stat-label">Total Workers</div>
                             <div class="stat-value">{{ total_workers }}</div>
                         </div>
-                        <div class="stat-card">
+                        <div class="stat-card" data-icon="departments">
                             <div class="stat-label">Total Departments</div>
                             <div class="stat-value">{{ total_departments }}</div>
                         </div>
-                        <div class="stat-card">
+                        <div class="stat-card" data-icon="revenue">
                             <div class="stat-label">Total Revenue</div>
                             <div class="stat-value positive">${{ "%.2f"|format(total_revenue) }}</div>
                         </div>
-                        <div class="stat-card">
+                        <div class="stat-card" data-icon="expenses">
                             <div class="stat-label">Total Expenses</div>
                             <div class="stat-value negative">${{ "%.2f"|format(total_expenses) }}</div>
                         </div>
-                        <div class="stat-card">
+                        <div class="stat-card" data-icon="profit">
                             <div class="stat-label">Profit</div>
                             <div class="stat-value {% if profit >= 0 %}positive{% else %}negative{% endif %}">${{ "%.2f"|format(profit) }}</div>
                         </div>
                         {% if ceo_data %}
-                        <div class="stat-card">
+                        <div class="stat-card" data-icon="wallet">
                             <div class="stat-label">Master Wallet</div>
                             <div class="stat-value" style="font-size: 0.9rem; font-family: monospace;">{{ ceo_data.get('master_wallet', '')[:10] }}...{{ ceo_data.get('master_wallet', '')[-8:] }}</div>
                         </div>

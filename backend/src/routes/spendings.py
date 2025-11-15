@@ -7,6 +7,7 @@ from typing import List
 from ..database import get_db
 from ..models import AdditionalSpending, Company, Department
 from ..schemas import SpendingCreate, SpendingResponse
+from pydantic import BaseModel
 from ..auth import get_current_user
 
 router = APIRouter(prefix="/api/spendings", tags=["spendings"])
@@ -94,4 +95,53 @@ async def delete_spending(
     db.delete(spending)
     db.commit()
     return {"message": "Spending deleted"}
+
+
+class DateUpdate(BaseModel):
+    date: str
+
+@router.patch("/{spending_id}/date", response_model=SpendingResponse)
+async def update_spending_date(
+    spending_id: int,
+    date_data: DateUpdate,
+    current_user=Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """Update spending date (created_at)"""
+    company = db.query(Company).filter(Company.user_id == current_user.id).first()
+    if not company:
+        raise HTTPException(status_code=404, detail="Company not found")
+    
+    spending = db.query(AdditionalSpending).filter(
+        AdditionalSpending.id == spending_id,
+        AdditionalSpending.company_id == company.id
+    ).first()
+    
+    if not spending:
+        raise HTTPException(status_code=404, detail="Spending not found")
+    
+    # Update created_at with the new date
+    from datetime import datetime, date as date_type
+    try:
+        # Parse date string (format: YYYY-MM-DD)
+        date_str = date_data.date
+        if "T" in date_str:
+            date_str = date_str.split("T")[0]
+        
+        # Parse YYYY-MM-DD format
+        date_parts = date_str.split("-")
+        if len(date_parts) == 3:
+            year, month, day = int(date_parts[0]), int(date_parts[1]), int(date_parts[2])
+            date_obj = date_type(year, month, day)
+            # Convert to datetime for created_at field
+            new_date = datetime.combine(date_obj, datetime.min.time())
+        else:
+            new_date = datetime.fromisoformat(date_str)
+        
+        spending.created_at = new_date
+        db.commit()
+        db.refresh(spending)
+        return spending
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Invalid date format: {str(e)}")
 

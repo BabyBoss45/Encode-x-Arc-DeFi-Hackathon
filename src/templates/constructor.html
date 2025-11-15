@@ -25,98 +25,118 @@
             <div class="left-panel">
                 <!-- CEO / Master Wallet Section -->
                 <div class="form-section">
-                    <h2>CEO & Treasury</h2>
-                    <form method="POST" action="/constructor/ceo" class="form-card">
-                        <div class="form-group">
-                            <label for="master_wallet">Master Wallet Address:</label>
-                            <input type="text" id="master_wallet" name="master_wallet" 
-                                   placeholder="0x..." required 
-                                   value="{{ ceo_data.get('master_wallet', '') if ceo_data else '' }}">
-                        </div>
-                        <div class="form-group">
-                            <label for="payroll_frequency">Payroll Frequency:</label>
-                            <select id="payroll_frequency" name="payroll_frequency" required>
-                                <option value="weekly" {% if ceo_data and ceo_data.get('payroll_frequency') == 'weekly' %}selected{% endif %}>Weekly</option>
-                                <option value="biweekly" {% if ceo_data and ceo_data.get('payroll_frequency') == 'biweekly' %}selected{% endif %}>Bi-weekly</option>
-                                <option value="monthly" {% if ceo_data and ceo_data.get('payroll_frequency') == 'monthly' %}selected{% endif %}>Monthly</option>
-                            </select>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Save CEO Settings</button>
-                    </form>
+                    <button class="form-section-toggle" onclick="toggleFormSection('ceo-section')">
+                        <span>CEO & Treasury</span>
+                        <span class="toggle-icon">▼</span>
+                    </button>
+                    <div class="form-section-content" id="ceo-section" style="display: none;">
+                        <form method="POST" action="/constructor/ceo" class="form-card">
+                            <div class="form-group">
+                                <label for="master_wallet">Master Wallet Address:</label>
+                                <input type="text" id="master_wallet" name="master_wallet" 
+                                       placeholder="0x..." required 
+                                       value="{{ ceo_data.get('master_wallet', '') if ceo_data else '' }}">
+                            </div>
+                            <div class="form-group">
+                                <label for="payroll_frequency">Payroll Frequency:</label>
+                                <select id="payroll_frequency" name="payroll_frequency" required>
+                                    <option value="weekly" {% if ceo_data and ceo_data.get('payroll_frequency') == 'weekly' %}selected{% endif %}>Weekly</option>
+                                    <option value="biweekly" {% if ceo_data and ceo_data.get('payroll_frequency') == 'biweekly' %}selected{% endif %}>Bi-weekly</option>
+                                    <option value="monthly" {% if ceo_data and ceo_data.get('payroll_frequency') == 'monthly' %}selected{% endif %}>Monthly</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Save CEO Settings</button>
+                        </form>
+                    </div>
                 </div>
 
                 <!-- Department Section -->
                 <div class="form-section">
-                    <h2>Add Department</h2>
-                    <form method="POST" action="/constructor/department" class="form-card">
-                        <div class="form-group">
-                            <label for="dept_name">Department Name:</label>
-                            <input type="text" id="dept_name" name="name" placeholder="e.g., Engineering" required>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Add Department</button>
-                    </form>
+                    <button class="form-section-toggle" onclick="toggleFormSection('department-section')">
+                        <span>Add Department</span>
+                        <span class="toggle-icon">▼</span>
+                    </button>
+                    <div class="form-section-content" id="department-section" style="display: none;">
+                        <form method="POST" action="/constructor/department" class="form-card">
+                            <div class="form-group">
+                                <label for="dept_name">Department Name:</label>
+                                <input type="text" id="dept_name" name="name" placeholder="e.g., Engineering" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Add Department</button>
+                        </form>
+                    </div>
                 </div>
 
                 <!-- Worker Section -->
                 <div class="form-section">
-                    <h2>Add Worker</h2>
-                    <form method="POST" action="/constructor/worker" class="form-card">
-                        <div class="form-group">
-                            <label for="worker_name">Name:</label>
-                            <input type="text" id="worker_name" name="name" placeholder="John" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="worker_surname">Surname:</label>
-                            <input type="text" id="worker_surname" name="surname" placeholder="Doe" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="worker_salary">Salary (USDC):</label>
-                            <input type="number" step="0.01" min="0" id="worker_salary" name="salary" placeholder="5000.00" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="worker_wallet">Wallet Address:</label>
-                            <input type="text" id="worker_wallet" name="wallet" placeholder="0x..." required>
-                        </div>
-                        <div class="form-group">
-                            <label for="worker_department">Department:</label>
-                            <select id="worker_department" name="department_id" required>
-                                <option value="">Select Department</option>
-                                {% for dept in departments %}
-                                <option value="{{ dept.id }}">{{ dept.name }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Add Worker</button>
-                    </form>
+                    <button class="form-section-toggle" onclick="toggleFormSection('worker-section')">
+                        <span>Add Worker</span>
+                        <span class="toggle-icon">▼</span>
+                    </button>
+                    <div class="form-section-content" id="worker-section" style="display: none;">
+                        <form method="POST" action="/constructor/worker" class="form-card">
+                            <div class="form-group">
+                                <label for="worker_name">Name:</label>
+                                <input type="text" id="worker_name" name="name" placeholder="John" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="worker_surname">Surname:</label>
+                                <input type="text" id="worker_surname" name="surname" placeholder="Doe" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="worker_salary">Salary (USDC):</label>
+                                <input type="number" step="0.01" min="0" id="worker_salary" name="salary" placeholder="5000.00" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="worker_wallet">Wallet Address:</label>
+                                <input type="text" id="worker_wallet" name="wallet" placeholder="0x..." required>
+                            </div>
+                            <div class="form-group">
+                                <label for="worker_department">Department:</label>
+                                <select id="worker_department" name="department_id" required>
+                                    <option value="">Select Department</option>
+                                    {% for dept in departments %}
+                                    <option value="{{ dept.get('id', loop.index) }}">{{ dept.get('name', '') }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Add Worker</button>
+                        </form>
+                    </div>
                 </div>
 
                 <!-- Additional Spending Section -->
                 <div class="form-section">
-                    <h2>Add Additional Spending</h2>
-                    <form method="POST" action="/constructor/spending" class="form-card">
-                        <div class="form-group">
-                            <label for="spending_name">Spending Name:</label>
-                            <input type="text" id="spending_name" name="name" placeholder="e.g., Rent, Utilities, Subscription" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="spending_amount">Amount (USDC):</label>
-                            <input type="number" step="0.01" min="0" id="spending_amount" name="amount" placeholder="1000.00" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="spending_wallet">Wallet Address:</label>
-                            <input type="text" id="spending_wallet" name="wallet" placeholder="0x..." required>
-                        </div>
-                        <div class="form-group">
-                            <label for="spending_target">Assign To:</label>
-                            <select id="spending_target" name="target_type" required>
-                                <option value="ceo">CEO</option>
-                                {% for dept in departments %}
-                                <option value="dept_{{ dept.id }}">{{ dept.name }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Add Spending</button>
-                    </form>
+                    <button class="form-section-toggle" onclick="toggleFormSection('spending-section')">
+                        <span>Add Additional Spending</span>
+                        <span class="toggle-icon">▼</span>
+                    </button>
+                    <div class="form-section-content" id="spending-section" style="display: none;">
+                        <form method="POST" action="/constructor/spending" class="form-card">
+                            <div class="form-group">
+                                <label for="spending_name">Spending Name:</label>
+                                <input type="text" id="spending_name" name="name" placeholder="e.g., Rent, Utilities, Subscription" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="spending_amount">Amount (USDC):</label>
+                                <input type="number" step="0.01" min="0" id="spending_amount" name="amount" placeholder="1000.00" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="spending_wallet">Wallet Address:</label>
+                                <input type="text" id="spending_wallet" name="wallet" placeholder="0x..." required>
+                            </div>
+                            <div class="form-group">
+                                <label for="spending_target">Assign To:</label>
+                                <select id="spending_target" name="target_type" required>
+                                    <option value="ceo">CEO</option>
+                                    {% for dept in departments %}
+                                    <option value="dept_{{ dept.get('id', loop.index) }}">{{ dept.get('name', '') }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Add Spending</button>
+                        </form>
+                    </div>
                 </div>
             </div>
 
@@ -124,59 +144,67 @@
             <div class="center-panel">
                 <h2>Organization Structure</h2>
                 <div class="tree-container">
-                    <!-- CEO Block -->
+                    <!-- SVG for connecting lines -->
+                    <svg class="tree-connections" id="treeConnections">
+                        <!-- Lines will be drawn here by JavaScript -->
+                    </svg>
+                    
+                    <!-- Level 0: CEO (Root) -->
                     {% if ceo_data %}
-                    <div class="ceo-block">
-                        <div class="block-header neon-text">CEO</div>
-                        <div class="block-content">
-                            <p><strong>Master Wallet:</strong> <span class="wallet-address">{{ ceo_data.get('master_wallet', '')[:10] }}...{{ ceo_data.get('master_wallet', '')[-8:] }}</span></p>
-                            <p><strong>Payroll:</strong> {{ ceo_data.get('payroll_frequency', '')|title }}</p>
-                            {% if ceo_spendings %}
-                            <div class="spendings-list">
-                                <strong>Additional Spendings:</strong>
-                                <ul>
-                                    {% for spending in ceo_spendings %}
-                                    <li>{{ spending.get('name', '') }}: ${{ "%.2f"|format(spending.get('amount', 0)) }}</li>
-                                    {% endfor %}
-                                </ul>
+                    <div class="tree-level level-0">
+                        <div class="tree-node ceo-node" id="ceo-node">
+                            <div class="node-circle">
+                                <div class="node-label">CEO</div>
+                                <div class="node-value">{{ ceo_data.get('master_wallet', '')[:6] }}...</div>
                             </div>
-                            {% endif %}
                         </div>
                     </div>
                     {% else %}
-                    <div class="empty-state">Set up CEO & Master Wallet first</div>
+                    <div class="tree-level level-0">
+                        <div class="tree-node empty-node" id="ceo-node">
+                            <div class="node-circle">
+                                <div class="node-label">CEO</div>
+                                <div class="node-value">Not Set</div>
+                            </div>
+                        </div>
+                    </div>
                     {% endif %}
 
-                    <!-- Departments and Workers -->
+                    <!-- Departments with their workers in columns -->
                     {% if departments %}
-                    <div class="departments-container">
+                    <div class="tree-level level-1 departments-row">
                         {% for dept in departments %}
-                        <div class="department-block">
-                            <div class="block-header neon-text" style="color: var(--color-cyan);">{{ dept.get('name', '') }}</div>
-                            <div class="block-content">
-                                <p><strong>Workers:</strong> {{ dept.get('worker_count', 0) }}</p>
-                                <p><strong>Total Spendings:</strong> ${{ "%.2f"|format(dept.get('total_spendings', 0)) }}</p>
-                                {% if dept.get('spendings') %}
-                                <div class="spendings-list">
-                                    <strong>Additional Spendings:</strong>
-                                    <ul>
-                                        {% for spending in dept.get('spendings', []) %}
-                                        <li>{{ spending.get('name', '') }}: ${{ "%.2f"|format(spending.get('amount', 0)) }}</li>
-                                        {% endfor %}
-                                    </ul>
+                            {% set dept_index = loop.index0 %}
+                            {% set dept_id = dept.get('id', dept_index + 1) %}
+                        <div class="department-column" data-dept-id="{{ dept_id }}">
+                            <!-- Department Node -->
+                            <div class="tree-node department-node" data-dept-id="{{ dept_id }}" id="dept-{{ dept_id }}" onmouseenter="showDeletePanel(this, 'department', {{ dept_id }})" onmouseleave="hideDeletePanel(this)">
+                                <div class="tree-connector vertical"></div>
+                                <div class="node-circle">
+                                    <div class="node-label">{{ dept.get('name', '') }}</div>
+                                    <div class="node-value">{{ dept.get('worker_count', 0) }} workers</div>
                                 </div>
-                                {% endif %}
+                                <div class="delete-panel" style="display: none;">
+                                    <button class="delete-panel-btn" onclick="deleteDepartment({{ dept_id }}); event.stopPropagation();">Delete Department</button>
+                                </div>
                             </div>
                             
-                            <!-- Workers in this department -->
+                            <!-- Workers for this department -->
                             {% if dept.get('workers') %}
-                            <div class="workers-container">
+                            <div class="workers-column">
                                 {% for worker in dept.get('workers', []) %}
-                                <div class="worker-block">
-                                    <div class="block-header-small">{{ worker.get('name', '') }} {{ worker.get('surname', '') }}</div>
-                                    <div class="block-content-small">
-                                        <p>Salary: ${{ "%.2f"|format(worker.get('salary', 0)) }}</p>
-                                        <p>Wallet: <span class="wallet-address">{{ worker.get('wallet', '')[:10] }}...{{ worker.get('wallet', '')[-8:] }}</span></p>
+                                <div class="tree-node worker-node" 
+                                     data-dept-id="{{ dept_id }}" 
+                                     data-worker-id="{{ worker.get('id', '') }}"
+                                     id="worker-{{ dept_id }}-{{ loop.index }}"
+                                     data-worker-name="{{ worker.get('name', '') }} {{ worker.get('surname', '') }}"
+                                     data-worker-salary="{{ worker.get('salary', 0) }}"
+                                     data-worker-department="{{ dept.get('name', '') }}"
+                                     data-worker-years="{{ worker.get('years_in_company', 2) }}"
+                                     data-worker-salary-change="{{ worker.get('salary_change', 0) }}"
+                                     onclick="showWorkerModal(this); event.stopPropagation();">
+                                    <div class="node-circle">
+                                        <div class="node-label">{{ worker.get('name', '') }} {{ worker.get('surname', '') }}</div>
                                     </div>
                                 </div>
                                 {% endfor %}
@@ -189,32 +217,498 @@
                 </div>
             </div>
 
+            <script>
+                // Draw connecting lines between nodes
+                function drawTreeConnections() {
+                    const svg = document.getElementById('treeConnections');
+                    if (!svg) return;
+                    
+                    // Clear existing lines
+                    svg.innerHTML = '';
+                    
+                    const ceoNode = document.getElementById('ceo-node');
+                    const deptNodes = document.querySelectorAll('.department-node');
+                    const workerNodes = document.querySelectorAll('.worker-node');
+                    
+                    if (!ceoNode || deptNodes.length === 0) return;
+                    
+                    // Get container bounds
+                    const container = document.querySelector('.tree-container');
+                    const containerRect = container.getBoundingClientRect();
+                    svg.setAttribute('width', containerRect.width);
+                    svg.setAttribute('height', containerRect.height);
+                    svg.style.position = 'absolute';
+                    svg.style.top = '0';
+                    svg.style.left = '0';
+                    svg.style.pointerEvents = 'none';
+                    svg.style.zIndex = '1';
+                    
+                    // Get CEO position
+                    const ceoRect = ceoNode.getBoundingClientRect();
+                    const ceoX = ceoRect.left + ceoRect.width / 2 - containerRect.left;
+                    const ceoY = ceoRect.top + ceoRect.height - containerRect.top;
+                    
+                    // Calculate positions of all departments
+                    const deptPositions = [];
+                    deptNodes.forEach((deptNode) => {
+                        const deptRect = deptNode.getBoundingClientRect();
+                        deptPositions.push({
+                            x: deptRect.left + deptRect.width / 2 - containerRect.left,
+                            y: deptRect.top - containerRect.top,
+                            node: deptNode
+                        });
+                    });
+                    
+                    if (deptPositions.length === 0) return;
+                    
+                    // Find the leftmost and rightmost departments
+                    const leftmostDept = deptPositions.reduce((min, dept) => dept.x < min.x ? dept : min);
+                    const rightmostDept = deptPositions.reduce((max, dept) => dept.x > max.x ? dept : max);
+                    
+                    // Calculate horizontal branch position (30px above the top department)
+                    const branchY = Math.min(...deptPositions.map(d => d.y)) - 30;
+                    
+                    // Determine branch start: use CEO center or leftmost department, whichever is more left
+                    const branchStartX = Math.min(ceoX, leftmostDept.x);
+                    const branchEndX = rightmostDept.x;
+                    
+                    // Draw single vertical line from CEO down to branch level
+                    const verticalLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                    verticalLine.setAttribute('x1', ceoX);
+                    verticalLine.setAttribute('y1', ceoY);
+                    verticalLine.setAttribute('x2', ceoX);
+                    verticalLine.setAttribute('y2', branchY);
+                    verticalLine.setAttribute('stroke', 'rgba(139, 92, 246, 0.7)');
+                    verticalLine.setAttribute('stroke-width', '3');
+                    svg.appendChild(verticalLine);
+                    
+                    // Draw horizontal branch line from CEO center (or leftmost) to rightmost department
+                    const horizontalBranch = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                    horizontalBranch.setAttribute('x1', branchStartX);
+                    horizontalBranch.setAttribute('y1', branchY);
+                    horizontalBranch.setAttribute('x2', branchEndX);
+                    horizontalBranch.setAttribute('y2', branchY);
+                    horizontalBranch.setAttribute('stroke', 'rgba(139, 92, 246, 0.7)');
+                    horizontalBranch.setAttribute('stroke-width', '3');
+                    svg.appendChild(horizontalBranch);
+                    
+                    // If CEO is not at the branch start, draw connecting line from CEO to branch
+                    if (ceoX !== branchStartX) {
+                        const connectorLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                        connectorLine.setAttribute('x1', ceoX);
+                        connectorLine.setAttribute('y1', branchY);
+                        connectorLine.setAttribute('x2', branchStartX);
+                        connectorLine.setAttribute('y2', branchY);
+                        connectorLine.setAttribute('stroke', 'rgba(139, 92, 246, 0.7)');
+                        connectorLine.setAttribute('stroke-width', '3');
+                        svg.appendChild(connectorLine);
+                    }
+                    
+                    // Draw vertical lines from horizontal branch to each department
+                    deptPositions.forEach((dept) => {
+                        const lineToDept = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                        lineToDept.setAttribute('x1', dept.x);
+                        lineToDept.setAttribute('y1', branchY);
+                        lineToDept.setAttribute('x2', dept.x);
+                        lineToDept.setAttribute('y2', dept.y);
+                        lineToDept.setAttribute('stroke', 'rgba(139, 92, 246, 0.7)');
+                        lineToDept.setAttribute('stroke-width', '3');
+                        svg.appendChild(lineToDept);
+                    });
+                    
+                    // Draw lines from departments to their workers - with horizontal branch to avoid intersections
+                    deptNodes.forEach((deptNode) => {
+                        const deptId = deptNode.getAttribute('data-dept-id');
+                        const deptRect = deptNode.getBoundingClientRect();
+                        const deptX = deptRect.left + deptRect.width / 2 - containerRect.left;
+                        const deptY = deptRect.top + deptRect.height - containerRect.top;
+                        
+                        // Find workers for this specific department only
+                        const deptWorkers = Array.from(workerNodes).filter(w => {
+                            const workerDeptId = w.getAttribute('data-dept-id');
+                            return workerDeptId === deptId || workerDeptId === String(deptId);
+                        });
+                        
+                        if (deptWorkers.length === 0) return;
+                        
+                        // Calculate the horizontal branch position (middle of all workers)
+                        let minWorkerX = Infinity;
+                        let maxWorkerX = -Infinity;
+                        let maxWorkerY = -Infinity;
+                        
+                        deptWorkers.forEach((worker) => {
+                            const workerRect = worker.getBoundingClientRect();
+                            const workerX = workerRect.left + workerRect.width / 2 - containerRect.left;
+                            const workerY = workerRect.top - containerRect.top;
+                            
+                            if (workerX < minWorkerX) minWorkerX = workerX;
+                            if (workerX > maxWorkerX) maxWorkerX = workerX;
+                            if (workerY > maxWorkerY) maxWorkerY = workerY;
+                        });
+                        
+                        const horizontalBranchX = (minWorkerX + maxWorkerX) / 2;
+                        const horizontalBranchY = maxWorkerY - 30; // Position above workers
+                        
+                        // Draw vertical line from department down
+                        const verticalLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                        verticalLine.setAttribute('x1', deptX);
+                        verticalLine.setAttribute('y1', deptY);
+                        verticalLine.setAttribute('x2', deptX);
+                        verticalLine.setAttribute('y2', horizontalBranchY);
+                        verticalLine.setAttribute('stroke', 'rgba(245, 158, 11, 0.7)');
+                        verticalLine.setAttribute('stroke-width', '3');
+                        svg.appendChild(verticalLine);
+                        
+                        // Draw horizontal branch line
+                        const horizontalLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                        horizontalLine.setAttribute('x1', minWorkerX);
+                        horizontalLine.setAttribute('y1', horizontalBranchY);
+                        horizontalLine.setAttribute('x2', maxWorkerX);
+                        horizontalLine.setAttribute('y2', horizontalBranchY);
+                        horizontalLine.setAttribute('stroke', 'rgba(245, 158, 11, 0.7)');
+                        horizontalLine.setAttribute('stroke-width', '3');
+                        svg.appendChild(horizontalLine);
+                        
+                        // Draw vertical lines from horizontal branch to each worker
+                        deptWorkers.forEach((worker) => {
+                            const workerRect = worker.getBoundingClientRect();
+                            const workerX = workerRect.left + workerRect.width / 2 - containerRect.left;
+                            const workerY = workerRect.top - containerRect.top;
+                            
+                            // Vertical line from horizontal branch down to worker
+                            const lineToWorker = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                            lineToWorker.setAttribute('x1', workerX);
+                            lineToWorker.setAttribute('y1', horizontalBranchY);
+                            lineToWorker.setAttribute('x2', workerX);
+                            lineToWorker.setAttribute('y2', workerY);
+                            lineToWorker.setAttribute('stroke', 'rgba(245, 158, 11, 0.7)');
+                            lineToWorker.setAttribute('stroke-width', '3');
+                            svg.appendChild(lineToWorker);
+                        });
+                    });
+                }
+                
+                // Draw connections after page loads
+                window.addEventListener('load', drawTreeConnections);
+                window.addEventListener('resize', drawTreeConnections);
+                
+                // Also draw after a short delay to ensure layout is complete
+                setTimeout(drawTreeConnections, 100);
+                
+                // Delete panel functions
+                function showDeletePanel(node, type, id) {
+                    const deletePanel = node.querySelector('.delete-panel');
+                    if (deletePanel) {
+                        // Position panel to the right of the node
+                        const nodeRect = node.getBoundingClientRect();
+                        const treeContainer = document.querySelector('.tree-container');
+                        if (!treeContainer) return;
+                        
+                        const containerRect = treeContainer.getBoundingClientRect();
+                        const panelX = nodeRect.right - containerRect.left + 15;
+                        const panelY = nodeRect.top - containerRect.top + (nodeRect.height / 2) - 20;
+                        
+                        deletePanel.style.position = 'absolute';
+                        deletePanel.style.left = panelX + 'px';
+                        deletePanel.style.top = panelY + 'px';
+                        deletePanel.style.display = 'block';
+                        
+                        // Add fade-in animation
+                        setTimeout(() => {
+                            deletePanel.classList.add('active');
+                        }, 10);
+                    }
+                }
+                
+                function hideDeletePanel(node) {
+                    const deletePanel = node.querySelector('.delete-panel');
+                    if (deletePanel && !deletePanel.matches(':hover')) {
+                        deletePanel.classList.remove('active');
+                        setTimeout(() => {
+                            if (!deletePanel.matches(':hover')) {
+                                deletePanel.style.display = 'none';
+                            }
+                        }, 200);
+                    }
+                }
+                
+                // Keep panel visible when hovering over it
+                document.addEventListener('mouseover', function(e) {
+                    if (e.target.closest('.delete-panel')) {
+                        const panel = e.target.closest('.delete-panel');
+                        panel.classList.add('active');
+                        panel.style.display = 'block';
+                    }
+                });
+                
+                // Delete department function
+                async function deleteDepartment(deptId) {
+                    if (!confirm('Are you sure you want to delete this department and all its workers?')) {
+                        return;
+                    }
+                    
+                    try {
+                        const response = await fetch(`/constructor/department/${deptId}/delete`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            }
+                        });
+                        
+                        if (response.ok || response.status === 303) {
+                            window.location.reload();
+                        } else {
+                            alert('Failed to delete department');
+                        }
+                    } catch (error) {
+                        console.error('Error deleting department:', error);
+                        alert('Error deleting department');
+                    }
+                }
+                
+                // Delete worker function
+                async function deleteWorker(workerId) {
+                    if (!confirm('Are you sure you want to delete this worker?')) {
+                        return;
+                    }
+                    
+                    try {
+                        const response = await fetch(`/constructor/worker/${workerId}/delete`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            }
+                        });
+                        
+                        if (response.ok || response.status === 303) {
+                            window.location.reload();
+                        } else {
+                            alert('Failed to delete worker');
+                        }
+                    } catch (error) {
+                        console.error('Error deleting worker:', error);
+                        alert('Error deleting worker');
+                    }
+                }
+                
+                // Worker modal functions
+                let currentWorkerId = null;
+                
+                function showWorkerModal(workerNode) {
+                    const modal = document.getElementById('workerModal');
+                    const backdrop = document.getElementById('workerModalBackdrop');
+                    
+                    if (!modal || !backdrop) return;
+                    
+                    // Get worker data
+                    const workerId = workerNode.getAttribute('data-worker-id');
+                    const name = workerNode.getAttribute('data-worker-name');
+                    const salary = parseFloat(workerNode.getAttribute('data-worker-salary'));
+                    const department = workerNode.getAttribute('data-worker-department');
+                    const years = workerNode.getAttribute('data-worker-years');
+                    const salaryChange = parseFloat(workerNode.getAttribute('data-worker-salary-change'));
+                    
+                    // Store current worker ID for deletion
+                    currentWorkerId = workerId;
+                    
+                    // Update modal content
+                    document.getElementById('modalWorkerName').textContent = name;
+                    document.getElementById('modalWorkerSalary').textContent = '$' + salary.toFixed(2);
+                    document.getElementById('modalWorkerDepartment').textContent = department;
+                    document.getElementById('modalWorkerYears').textContent = years + ' years';
+                    
+                    // Update salary change
+                    const salaryChangeEl = document.getElementById('modalSalaryChange');
+                    const salaryChangeArrow = document.getElementById('salaryChangeArrow');
+                    if (salaryChange > 0) {
+                        salaryChangeEl.textContent = '+' + salaryChange.toFixed(2) + '%';
+                        salaryChangeEl.className = 'salary-change positive';
+                        salaryChangeArrow.innerHTML = '↑';
+                        salaryChangeArrow.className = 'arrow up';
+                    } else if (salaryChange < 0) {
+                        salaryChangeEl.textContent = salaryChange.toFixed(2) + '%';
+                        salaryChangeEl.className = 'salary-change negative';
+                        salaryChangeArrow.innerHTML = '↓';
+                        salaryChangeArrow.className = 'arrow down';
+                    } else {
+                        salaryChangeEl.textContent = '0%';
+                        salaryChangeEl.className = 'salary-change neutral';
+                        salaryChangeArrow.innerHTML = '→';
+                        salaryChangeArrow.className = 'arrow neutral';
+                    }
+                    
+                    // Show delete button if worker ID exists
+                    const deleteBtn = document.getElementById('modalDeleteWorkerBtn');
+                    if (deleteBtn) {
+                        deleteBtn.style.display = workerId ? 'block' : 'none';
+                    }
+                    
+                    // Show modal
+                    backdrop.style.display = 'flex';
+                    modal.style.display = 'block';
+                    // Force reflow
+                    void backdrop.offsetHeight;
+                    backdrop.classList.add('active');
+                    modal.classList.add('active');
+                }
+                
+                // Delete worker from modal
+                async function deleteWorkerFromModal() {
+                    if (!currentWorkerId) return;
+                    
+                    if (!confirm('Are you sure you want to delete this worker?')) {
+                        return;
+                    }
+                    
+                    try {
+                        const response = await fetch(`/constructor/worker/${currentWorkerId}/delete`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            }
+                        });
+                        
+                        if (response.ok || response.status === 303) {
+                            hideWorkerModal();
+                            window.location.reload();
+                        } else {
+                            alert('Failed to delete worker');
+                        }
+                    } catch (error) {
+                        console.error('Error deleting worker:', error);
+                        alert('Error deleting worker');
+                    }
+                }
+                
+                function hideWorkerModal() {
+                    const modal = document.getElementById('workerModal');
+                    const backdrop = document.getElementById('workerModalBackdrop');
+                    
+                    if (!modal || !backdrop) return;
+                    
+                    backdrop.classList.remove('active');
+                    modal.classList.remove('active');
+                    
+                    setTimeout(() => {
+                        backdrop.style.display = 'none';
+                        modal.style.display = 'none';
+                    }, 300);
+                }
+                
+                // Setup event listeners when DOM is ready
+                (function() {
+                    const modal = document.getElementById('workerModal');
+                    const backdrop = document.getElementById('workerModalBackdrop');
+                    
+                    if (modal && backdrop) {
+                        // Close when clicking on backdrop (outside modal)
+                        backdrop.addEventListener('click', (e) => {
+                            if (e.target === backdrop) {
+                                hideWorkerModal();
+                            }
+                        });
+                        
+                        // Prevent modal from closing when clicking inside it
+                        modal.addEventListener('click', (e) => {
+                            e.stopPropagation();
+                        });
+                    }
+                    
+                    // Close modal when clicking anywhere outside (document click)
+                    document.addEventListener('click', (e) => {
+                        const modal = document.getElementById('workerModal');
+                        const backdrop = document.getElementById('workerModalBackdrop');
+                        
+                        if (modal && backdrop && backdrop.style.display === 'flex') {
+                            // Check if click is outside both modal and backdrop
+                            if (!modal.contains(e.target) && !backdrop.contains(e.target)) {
+                                hideWorkerModal();
+                            }
+                        }
+                    });
+                })();
+                
+                // Toggle form sections
+                function toggleFormSection(sectionId) {
+                    const section = document.getElementById(sectionId);
+                    const toggle = event.currentTarget;
+                    const icon = toggle.querySelector('.toggle-icon');
+                    
+                    if (section.style.display === 'none' || !section.style.display) {
+                        section.style.display = 'block';
+                        icon.textContent = '▲';
+                        toggle.classList.add('active');
+                    } else {
+                        section.style.display = 'none';
+                        icon.textContent = '▼';
+                        toggle.classList.remove('active');
+                    }
+                }
+            </script>
+            
+            <!-- Worker Modal -->
+            <div class="worker-modal-backdrop" id="workerModalBackdrop"></div>
+            <div class="worker-modal" id="workerModal">
+                <div class="worker-modal-content">
+                    <h3 class="modal-title">Employee Details</h3>
+                    <div class="modal-info">
+                        <div class="modal-info-row">
+                            <span class="modal-label">Name:</span>
+                            <span class="modal-value" id="modalWorkerName">-</span>
+                        </div>
+                        <div class="modal-info-row">
+                            <span class="modal-label">Department:</span>
+                            <span class="modal-value" id="modalWorkerDepartment">-</span>
+                        </div>
+                        <div class="modal-info-row">
+                            <span class="modal-label">Current Salary:</span>
+                            <span class="modal-value salary-value" id="modalWorkerSalary">-</span>
+                        </div>
+                        <div class="modal-info-row">
+                            <span class="modal-label">Years in Company:</span>
+                            <span class="modal-value" id="modalWorkerYears">-</span>
+                        </div>
+                        <div class="modal-info-row">
+                            <span class="modal-label">Salary Change:</span>
+                            <span class="modal-value salary-change-container">
+                                <span class="arrow" id="salaryChangeArrow">→</span>
+                                <span class="salary-change" id="modalSalaryChange">0%</span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Right Panel: Revenue -->
             <div class="right-panel">
-                <div class="revenue-section">
-                    <h2>Business Revenue</h2>
-                    <form method="POST" action="/constructor/revenue" class="form-card">
-                        <div class="form-group">
-                            <label for="revenue_month">Month:</label>
-                            <input type="month" id="revenue_month" name="month" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="revenue_amount">Revenue (USDC):</label>
-                            <input type="number" step="0.01" min="0" id="revenue_amount" name="amount" placeholder="50000.00" required>
-                        </div>
-                        <button type="submit" class="btn btn-success">Add Revenue</button>
-                    </form>
-                    
-                    {% if revenues %}
-                    <div class="revenue-list">
-                        <h3>Monthly Revenues</h3>
-                        <ul>
-                            {% for revenue in revenues %}
-                            <li>{{ revenue.get('month', '') }}: ${{ "%.2f"|format(revenue.get('amount', 0)) }}</li>
-                            {% endfor %}
-                        </ul>
+                <div class="form-section">
+                    <div class="form-section-header">
+                        <h3>Add Revenue</h3>
                     </div>
-                    {% endif %}
+                    <div class="form-section-content" id="revenue-section" style="display: block;">
+                        <form method="POST" action="/constructor/revenue" class="form-card">
+                            <div class="form-group">
+                                <label for="revenue_month">Month:</label>
+                                <input type="month" id="revenue_month" name="month" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="revenue_amount">Revenue (USDC):</label>
+                                <input type="number" step="0.01" min="0" id="revenue_amount" name="amount" placeholder="50000.00" required>
+                            </div>
+                            <button type="submit" class="btn btn-success">Add Revenue</button>
+                        </form>
+                        
+                        {% if revenues %}
+                        <div class="revenue-list" style="margin-top: 1.5rem;">
+                            <h3 style="font-size: 1rem; margin-bottom: 1rem; color: var(--text-primary);">Monthly Revenues</h3>
+                            <ul>
+                                {% for revenue in revenues %}
+                                <li>{{ revenue.get('month', '') }}: ${{ "%.2f"|format(revenue.get('amount', 0)) }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
         </div>

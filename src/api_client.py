@@ -148,6 +148,16 @@ class APIClient:
         response.raise_for_status()
         return response.json()
     
+    def update_spending_date(self, spending_id: int, date: str) -> Dict:
+        """Update spending date (created_at)"""
+        response = requests.patch(
+            f"{self.base_url}/spendings/{spending_id}/date",
+            json={"date": date},
+            headers=self._get_headers()
+        )
+        response.raise_for_status()
+        return response.json()
+    
     # Revenue methods
     def get_revenues(self) -> List[Dict]:
         """Get all revenues"""
@@ -184,6 +194,15 @@ class APIClient:
         response = requests.post(
             f"{self.base_url}/payroll/execute",
             json={"period_start": period_start, "period_end": period_end},
+            headers=self._get_headers()
+        )
+        response.raise_for_status()
+        return response.json()
+    
+    def get_payroll_transactions(self) -> List[Dict]:
+        """Get all payroll transactions"""
+        response = requests.get(
+            f"{self.base_url}/payroll/transactions",
             headers=self._get_headers()
         )
         response.raise_for_status()

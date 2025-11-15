@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BossBoard - Dashboard</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="/static/constructor.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <header class="dashboard-header">
+            <h1>BossBoard Dashboard</h1>
+            <nav>
+                <a href="/constructor" class="nav-link">Constructor</a>
+                <a href="/login" class="nav-link">Logout</a>
+            </nav>
+        </header>
+        
+        <main class="dashboard-main">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">Total Workers</div>
+                    <div class="stat-value">{{ total_workers }}</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Total Departments</div>
+                    <div class="stat-value">{{ total_departments }}</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Total Revenue</div>
+                    <div class="stat-value positive">${{ "%.2f"|format(total_revenue) }}</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Total Payroll</div>
+                    <div class="stat-value negative">${{ "%.2f"|format(total_payroll) }}</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Additional Spendings</div>
+                    <div class="stat-value negative">${{ "%.2f"|format(total_spendings) }}</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Total Expenses</div>
+                    <div class="stat-value negative">${{ "%.2f"|format(total_expenses) }}</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Profit</div>
+                    <div class="stat-value {% if profit >= 0 %}positive{% else %}negative{% endif %}">${{ "%.2f"|format(profit) }}</div>
+                </div>
+                {% if ceo_data %}
+                <div class="stat-card">
+                    <div class="stat-label">Master Wallet</div>
+                    <div class="stat-value" style="font-size: 0.9rem; font-family: monospace;">{{ ceo_data.get('master_wallet', '')[:10] }}...{{ ceo_data.get('master_wallet', '')[-8:] }}</div>
+                </div>
+                {% endif %}
+            </div>
+
+            {% if dept_stats %}
+            <div class="card">
+                <h2 class="card-title">Department Statistics</h2>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Department</th>
+                            <th>Workers</th>
+                            <th>Payroll</th>
+                            <th>Additional Spendings</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for dept in dept_stats %}
+                        <tr>
+                            <td><strong>{{ dept.get('name', '') }}</strong></td>
+                            <td>{{ dept.get('worker_count', 0) }}</td>
+                            <td>${{ "%.2f"|format(dept.get('payroll', 0)) }}</td>
+                            <td>${{ "%.2f"|format(dept.get('spendings', 0)) }}</td>
+                            <td><strong>${{ "%.2f"|format(dept.get('total', 0)) }}</strong></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% endif %}
+        </main>
+    </div>
+</body>
+</html>
+

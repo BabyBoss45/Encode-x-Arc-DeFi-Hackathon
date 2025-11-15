@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BossBoard - Dashboard</title>
-    <link rel="stylesheet" href="/static/style.css">
-    <link rel="stylesheet" href="/static/constructor.css">
+    <title>ARC budget - Dashboard</title>
+    <link rel="stylesheet" href="/static/futuristic.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 </head>
 <body>
     <div class="dashboard-container">
         <header class="dashboard-header">
-            <h1>BossBoard Dashboard</h1>
+            <h1>ARC budget Dashboard</h1>
             <nav>
                 <a href="/constructor" class="nav-link">Constructor</a>
                 <a href="/login" class="nav-link">Logout</a>
@@ -32,14 +32,6 @@
                     <div class="stat-value positive">${{ "%.2f"|format(total_revenue) }}</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-label">Total Payroll</div>
-                    <div class="stat-value negative">${{ "%.2f"|format(total_payroll) }}</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-label">Additional Spendings</div>
-                    <div class="stat-value negative">${{ "%.2f"|format(total_spendings) }}</div>
-                </div>
-                <div class="stat-card">
                     <div class="stat-label">Total Expenses</div>
                     <div class="stat-value negative">${{ "%.2f"|format(total_expenses) }}</div>
                 </div>
@@ -55,35 +47,178 @@
                 {% endif %}
             </div>
 
-            {% if dept_stats %}
-            <div class="card">
-                <h2 class="card-title">Department Statistics</h2>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Department</th>
-                            <th>Workers</th>
-                            <th>Payroll</th>
-                            <th>Additional Spendings</th>
-                            <th>Total</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for dept in dept_stats %}
-                        <tr>
-                            <td><strong>{{ dept.get('name', '') }}</strong></td>
-                            <td>{{ dept.get('worker_count', 0) }}</td>
-                            <td>${{ "%.2f"|format(dept.get('payroll', 0)) }}</td>
-                            <td>${{ "%.2f"|format(dept.get('spendings', 0)) }}</td>
-                            <td><strong>${{ "%.2f"|format(dept.get('total', 0)) }}</strong></td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+            <div class="dashboard-layout">
+                <!-- Left Panel: Pie Chart -->
+                <div class="dashboard-left-panel">
+                    <div class="card">
+                        <h2 class="card-title">Department Costs</h2>
+                        <div class="chart-container">
+                            <canvas id="departmentChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Panel: Revenues and Expenses -->
+                <div class="dashboard-right-panel">
+                    <div class="card">
+                        <h2 class="card-title">Revenues</h2>
+                        <div class="revenues-list">
+                            {% if revenues_list %}
+                                {% for revenue in revenues_list %}
+                                <div class="revenue-item">
+                                    <div class="item-name">{{ revenue.get('month', 'N/A') }}</div>
+                                    <div class="item-amount positive">${{ "%.2f"|format(revenue.get('amount', 0)) }}</div>
+                                </div>
+                                {% endfor %}
+                            {% else %}
+                                <div class="empty-state">No revenues recorded</div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h2 class="card-title">Expenses</h2>
+                        <div class="expenses-list">
+                            {% if expenses_list %}
+                                {% for expense in expenses_list %}
+                                <div class="expense-item">
+                                    <div class="item-info">
+                                        <div class="item-name">{{ expense.get('name', 'N/A') }}</div>
+                                        <div class="item-type">{{ expense.get('type', '') }}</div>
+                                    </div>
+                                    <div class="item-amount negative">${{ "%.2f"|format(expense.get('amount', 0)) }}</div>
+                                </div>
+                                {% endfor %}
+                            {% else %}
+                                <div class="empty-state">No expenses recorded</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
             </div>
-            {% endif %}
         </main>
     </div>
+
+    <script>
+        // Prepare data for pie chart with detailed info
+        const deptData = [
+            {% for dept in dept_stats %}
+            {
+                name: "{{ dept.get('name', '') }}",
+                total: {{ dept.get('total', 0) }},
+                worker_count: {{ dept.get('worker_count', 0) }},
+                payroll: {{ dept.get('payroll', 0) }},
+                spendings: {{ dept.get('spendings', 0) }},
+                workers: [
+                    {% for worker in dept.get('workers', []) %}
+                    {
+                        name: "{{ worker.get('name', '') }} {{ worker.get('surname', '') }}",
+                        salary: {{ worker.get('salary', 0) }}
+                    }{% if not loop.last %},{% endif %}
+                    {% endfor %}
+                ]
+            }{% if not loop.last %},{% endif %}
+            {% endfor %}
+        ];
+
+        const ctx = document.getElementById('departmentChart');
+        if (ctx && deptData.length > 0) {
+            const chart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: deptData.map(d => d.name),
+                    datasets: [{
+                        data: deptData.map(d => d.total),
+                        backgroundColor: [
+                            'rgba(37, 99, 235, 0.9)',
+                            'rgba(139, 92, 246, 0.9)',
+                            'rgba(245, 158, 11, 0.9)',
+                            'rgba(234, 179, 8, 0.9)',
+                            'rgba(249, 115, 22, 0.9)',
+                            'rgba(59, 130, 246, 0.9)',
+                            'rgba(168, 85, 247, 0.9)',
+                            'rgba(251, 191, 36, 0.9)'
+                        ],
+                        borderColor: [
+                            'rgba(37, 99, 235, 1)',
+                            'rgba(139, 92, 246, 1)',
+                            'rgba(245, 158, 11, 1)',
+                            'rgba(234, 179, 8, 1)',
+                            'rgba(249, 115, 22, 1)',
+                            'rgba(59, 130, 246, 1)',
+                            'rgba(168, 85, 247, 1)',
+                            'rgba(251, 191, 36, 1)'
+                        ],
+                        borderWidth: 3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                padding: 10,
+                                font: {
+                                    size: 11,
+                                    family: "'Inter', sans-serif"
+                                }
+                            }
+                        },
+                        tooltip: {
+                            enabled: true,
+                            backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                            titleColor: '#1e293b',
+                            bodyColor: '#64748b',
+                            borderColor: 'rgba(37, 99, 235, 0.3)',
+                            borderWidth: 2,
+                            padding: 15,
+                            titleFont: {
+                                size: 14,
+                                weight: 'bold',
+                                family: "'Inter', sans-serif"
+                            },
+                            bodyFont: {
+                                size: 12,
+                                family: "'Inter', sans-serif"
+                            },
+                            boxPadding: 8,
+                            callbacks: {
+                                title: function(context) {
+                                    const dept = deptData[context[0].dataIndex];
+                                    return dept.name;
+                                },
+                                label: function(context) {
+                                    const dept = deptData[context.dataIndex];
+                                    const lines = [];
+                                    lines.push('Total Cost: $' + dept.total.toFixed(2));
+                                    lines.push('Workers: ' + dept.worker_count);
+                                    lines.push('Payroll: $' + dept.payroll.toFixed(2));
+                                    if (dept.spendings > 0) {
+                                        lines.push('Additional Spendings: $' + dept.spendings.toFixed(2));
+                                    }
+                                    return lines;
+                                },
+                                afterBody: function(context) {
+                                    const dept = deptData[context[0].dataIndex];
+                                    if (dept.workers && dept.workers.length > 0) {
+                                        const lines = [];
+                                        lines.push('');
+                                        lines.push('Workers:');
+                                        dept.workers.forEach(function(worker) {
+                                            lines.push('  • ' + worker.name + ': $' + worker.salary.toFixed(2));
+                                        });
+                                        return lines;
+                                    }
+                                    return [];
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    </script>
 </body>
 </html>
-

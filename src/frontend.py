@@ -318,7 +318,33 @@ async def dashboard(request: Request):
             "worker_count": len(workers_in_dept),
             "payroll": dept_payroll,
             "spendings": dept_spendings,
-            "total": dept_payroll + dept_spendings
+            "total": dept_payroll + dept_spendings,
+            "workers": workers_in_dept
+        })
+    
+    # Prepare revenues and expenses lists
+    revenues_list = organization_data["revenues"]
+    expenses_list = []
+    
+    # Add payroll expenses
+    for worker_id, worker in organization_data["workers"].items():
+        dept_name = "Unknown"
+        for dept_id, dept in organization_data["departments"].items():
+            if dept_id == worker.get("department_id"):
+                dept_name = dept.get("name", "Unknown")
+                break
+        expenses_list.append({
+            "type": "Payroll",
+            "name": f"{worker.get('name', '')} {worker.get('surname', '')} ({dept_name})",
+            "amount": worker.get("salary", 0)
+        })
+    
+    # Add additional spendings
+    for spending in organization_data["spendings"]:
+        expenses_list.append({
+            "type": "Spending",
+            "name": spending.get("name", ""),
+            "amount": spending.get("amount", 0)
         })
     
     return templates.TemplateResponse("dashboard.html", {
@@ -331,7 +357,9 @@ async def dashboard(request: Request):
         "total_revenue": total_revenue,
         "profit": profit,
         "dept_stats": dept_stats,
-        "ceo_data": organization_data["ceo"]
+        "ceo_data": organization_data["ceo"],
+        "revenues_list": revenues_list,
+        "expenses_list": expenses_list
     })
 
 

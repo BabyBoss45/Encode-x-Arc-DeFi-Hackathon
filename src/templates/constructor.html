@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BossBoard - Organization Constructor</title>
-    <link rel="stylesheet" href="/static/style.css">
-    <link rel="stylesheet" href="/static/constructor.css">
+    <title>ARC budget - Organization Constructor</title>
+    <link rel="stylesheet" href="/static/futuristic.css">
 </head>
 <body>
     <div class="constructor-container">
@@ -128,7 +127,7 @@
                     <!-- CEO Block -->
                     {% if ceo_data %}
                     <div class="ceo-block">
-                        <div class="block-header">CEO</div>
+                        <div class="block-header neon-text">CEO</div>
                         <div class="block-content">
                             <p><strong>Master Wallet:</strong> <span class="wallet-address">{{ ceo_data.get('master_wallet', '')[:10] }}...{{ ceo_data.get('master_wallet', '')[-8:] }}</span></p>
                             <p><strong>Payroll:</strong> {{ ceo_data.get('payroll_frequency', '')|title }}</p>
@@ -153,7 +152,7 @@
                     <div class="departments-container">
                         {% for dept in departments %}
                         <div class="department-block">
-                            <div class="block-header">{{ dept.get('name', '') }}</div>
+                            <div class="block-header neon-text" style="color: var(--color-cyan);">{{ dept.get('name', '') }}</div>
                             <div class="block-content">
                                 <p><strong>Workers:</strong> {{ dept.get('worker_count', 0) }}</p>
                                 <p><strong>Total Spendings:</strong> ${{ "%.2f"|format(dept.get('total_spendings', 0)) }}</p>

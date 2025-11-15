@@ -19,11 +19,11 @@
     --revolut-purple-light: #7B6BA8;
     
     /* Primary Colors - Revolut Palette */
-    --color-primary: #0075FF;
-    --color-primary-dark: #0052CC;
-    --color-primary-light: #3399FF;
-    --color-secondary: #5F4B8B;
-    --color-accent: #00D4FF;
+    --color-primary: #5B7FA8;
+    --color-primary-dark: #4A6B8F;
+    --color-primary-light: #6B8FB8;
+    --color-secondary: #6B5B7D;
+    --color-accent: #6B9DB8;
     
     /* Status Colors - Revolut Style */
     --color-success: #00D9A5;
@@ -992,7 +992,7 @@ select.form-input:focus {
 /* Constructor Layout */
 .constructor-layout {
     display: grid;
-    grid-template-columns: 250px 1fr 250px;
+    grid-template-columns: 350px 1fr 400px;
     gap: 2rem;
     padding: 3rem 3rem 3rem 3rem;
     max-width: 2000px;
@@ -1010,6 +1010,8 @@ select.form-input:focus {
     overflow: visible;
     margin: 0;
     position: relative;
+    min-width: 350px;
+    max-width: 400px;
 }
 
 .left-panel::before {
@@ -1127,6 +1129,15 @@ select.form-input:focus {
     flex-direction: column;
     align-items: center;
     z-index: 2;
+    gap: 0;
+}
+
+.draggable-node {
+    transition: opacity 0.2s ease;
+}
+
+.draggable-node:active {
+    cursor: grabbing !important;
 }
 
 .node-circle {
@@ -1145,11 +1156,12 @@ select.form-input:focus {
     position: relative;
     z-index: 2;
     padding: 0.5rem;
+    margin-top: 0;
 }
 
 .node-circle:hover {
     transform: scale(1.05);
-    box-shadow: 0 6px 30px rgba(0, 117, 255, 0.4);
+    box-shadow: 0 6px 30px rgba(91, 127, 168, 0.4);
 }
 
 .delete-panel {
@@ -1255,7 +1267,7 @@ select.form-input:focus {
     width: 2px;
     height: 20px;
     background: linear-gradient(180deg, var(--color-blue), var(--color-purple));
-    margin-bottom: 0.25rem;
+    margin-bottom: 0;
     position: relative;
     z-index: 1;
 }
@@ -1296,7 +1308,7 @@ select.form-input:focus {
     background: rgba(0, 0, 0, 0.3);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
-    display: none;
+    display: flex;
     align-items: center;
     justify-content: center;
     z-index: 9999;
@@ -1308,6 +1320,7 @@ select.form-input:focus {
 
 .worker-modal-backdrop.active {
     opacity: 1;
+    display: flex;
 }
 
 .worker-modal {
@@ -1328,7 +1341,6 @@ select.form-input:focus {
     opacity: 0;
     transition: all var(--transition-base);
     pointer-events: auto;
-    position: relative;
 }
 
 .worker-modal::before {
@@ -1351,6 +1363,8 @@ select.form-input:focus {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
+    align-items: center;
+    text-align: center;
 }
 
 .modal-title {
@@ -1371,6 +1385,7 @@ select.form-input:focus {
 .modal-info-row {
     display: flex;
     justify-content: space-between;
+    width: 100%;
     align-items: center;
     padding: 0.75rem 0;
     border-bottom: 1px solid var(--border-color);
@@ -1565,6 +1580,8 @@ select.form-input:focus {
     padding: 2.5rem;
     position: sticky;
     top: 2rem;
+    width: 100%;
+    min-width: 350px;
 }
 
 .revenue-section h2 {
@@ -1600,12 +1617,14 @@ select.form-input:focus {
 }
 
 .revenue-list li {
-    padding: 1rem;
+    padding: 0.875rem 1.25rem;
     background: var(--bg-secondary);
     margin: 0.75rem 0;
     border-left: 3px solid var(--color-sunset);
     color: var(--text-secondary);
     transition: all 0.3s;
+    width: 100%;
+    font-size: 0.875rem;
 }
 
 .revenue-list li:hover {
@@ -2196,7 +2215,7 @@ select.form-input:focus {
 /* Responsive */
 @media (max-width: 1400px) {
     .constructor-layout {
-        grid-template-columns: 220px 1fr 220px;
+        grid-template-columns: 320px 1fr 350px;
     }
     
     .dashboard-layout {

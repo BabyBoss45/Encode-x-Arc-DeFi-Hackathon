@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <title>ARC budget - Register</title>
     <link rel="stylesheet" href="/static/futuristic.css">
 </head>
@@ -35,8 +35,14 @@
                         id="password" 
                         name="password" 
                         required 
-                        placeholder="Enter your password"
+                        minlength="6"
+                        maxlength="72"
+                        placeholder="Enter your password (6-72 characters)"
+                        oninput="validatePasswordLength(this)"
                     >
+                    <small id="password-hint" style="color: #888; font-size: 0.85em; display: block; margin-top: 5px;">
+                        Password must be 6-72 characters long
+                    </small>
                 </div>
                 
                 <div class="form-group">
@@ -58,6 +64,50 @@
             </div>
         </div>
     </div>
+    
+    <script>
+        function validatePasswordLength(input) {
+            const password = input.value;
+            const passwordBytes = new TextEncoder().encode(password).length;
+            const hint = document.getElementById('password-hint');
+            
+            if (password.length === 0) {
+                hint.textContent = 'Password must be 6-72 characters long';
+                hint.style.color = '#888';
+                input.setCustomValidity('');
+            } else if (password.length < 6) {
+                hint.textContent = 'Password must be at least 6 characters';
+                hint.style.color = '#ff4444';
+                input.setCustomValidity('Password must be at least 6 characters');
+            } else if (passwordBytes > 72) {
+                hint.textContent = 'Password is too long (maximum 72 bytes). Current: ' + passwordBytes + ' bytes';
+                hint.style.color = '#ff4444';
+                input.setCustomValidity('Password is too long (maximum 72 bytes)');
+            } else {
+                hint.textContent = 'Password length: ' + passwordBytes + ' bytes (OK)';
+                hint.style.color = '#4caf50';
+                input.setCustomValidity('');
+            }
+        }
+        
+        // Validate on form submit
+        document.querySelector('form').addEventListener('submit', function(e) {
+            const password = document.getElementById('password').value;
+            const passwordBytes = new TextEncoder().encode(password).length;
+            
+            if (password.length < 6) {
+                e.preventDefault();
+                alert('Password must be at least 6 characters long');
+                return false;
+            }
+            
+            if (passwordBytes > 72) {
+                e.preventDefault();
+                alert('Password is too long (maximum 72 bytes). Current: ' + passwordBytes + ' bytes');
+                return false;
+            }
+        });
+    </script>
 </body>
 </html>
 

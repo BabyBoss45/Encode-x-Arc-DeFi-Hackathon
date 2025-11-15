@@ -25,6 +25,8 @@ class Company(Base):
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("users.id"), unique=True, nullable=False)
     master_wallet_address = Column(String, nullable=True)
+    payroll_day = Column(Integer, nullable=True)  # Day of month for payroll (1-31)
+    payroll_time = Column(String, nullable=True)  # Time for payroll (HH:MM format, e.g., "09:00")
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     
     user = relationship("User", back_populates="company")

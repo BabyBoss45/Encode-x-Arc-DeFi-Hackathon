@@ -156,6 +156,14 @@ async def signup(
             {"request": request, "error": "Password must be at least 6 characters"}
         )
     
+    # Validate password max length (bcrypt limit is 72 bytes)
+    password_bytes = password.encode('utf-8')
+    if len(password_bytes) > 72:
+        return templates.TemplateResponse(
+            "signup.html",
+            {"request": request, "error": "Password is too long (maximum 72 bytes). For Unicode characters, this is approximately 36-72 characters."}
+        )
+    
     # Validate company name
     if not company_name.strip():
         return templates.TemplateResponse(
@@ -250,11 +258,13 @@ async def constructor_page(request: Request):
                     
                     dept_spendings = [s for s in spendings if s.get("department_id") == dept.get("id")]
                     
+                    total_salary = sum(w.get("salary", 0) for w in dept_workers)
                     departments_list.append({
                         "id": dept.get("id"),
                         "name": dept.get("name", ""),
                         "worker_count": len(dept_workers),
-                        "total_spendings": sum(w.get("salary", 0) for w in dept_workers) + sum(s.get("amount", 0) for s in dept_spendings),
+                        "total_salary": total_salary,
+                        "total_spendings": total_salary + sum(s.get("amount", 0) for s in dept_spendings),
                         "workers": dept_workers,
                         "spendings": dept_spendings
                     })
@@ -262,7 +272,9 @@ async def constructor_page(request: Request):
                 ceo_spendings = [s for s in spendings if s.get("department_id") is None]
                 ceo_data = {
                     "master_wallet": company.get("master_wallet_address", ""),
-                    "payroll_frequency": "Monthly"  # Default
+                    "payroll_frequency": "Monthly",  # Default
+                    "payroll_day": company.get("payroll_day"),
+                    "payroll_time": company.get("payroll_time")
                 } if company.get("master_wallet_address") else None
                 
                 # Transform revenues
@@ -328,24 +340,51 @@ async def constructor_page(request: Request):
 
 # Handle CEO/Master Wallet
 @app.post("/constructor/ceo")
-async def save_ceo(request: Request, master_wallet: str = Form(...), payroll_frequency: str = Form(...)):
+async def save_ceo(
+    request: Request, 
+    master_wallet: str = Form(...), 
+    payroll_frequency: str = Form(None),
+    payroll_day: str = Form(None),
+    payroll_time: str = Form(None)
+):
     token = get_token_from_request(request)
     use_backend = check_backend_available() and token
     
     if not master_wallet.startswith("0x") or len(master_wallet) != 42:
         return RedirectResponse(url="/constructor?error=Invalid wallet address format", status_code=303)
     
+    # Parse payroll_day
+    payroll_day_int = None
+    if payroll_day:
+        try:
+            payroll_day_int = int(payroll_day)
+            if payroll_day_int < 1 or payroll_day_int > 31:
+                return RedirectResponse(url="/constructor?error=Payroll day must be between 1 and 31", status_code=303)
+        except ValueError:
+            return RedirectResponse(url="/constructor?error=Invalid payroll day", status_code=303)
+    
+    # Validate payroll_time format (HH:MM)
+    payroll_time_str = None
+    if payroll_time:
+        import re
+        time_pattern = r'^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$'
+        if not re.match(time_pattern, payroll_time):
+            return RedirectResponse(url="/constructor?error=Invalid time format. Use HH:MM (e.g., 09:00, 14:30)", status_code=303)
+        payroll_time_str = payroll_time
+    
     if use_backend:
         try:
             set_api_token(token)
-            api_client.set_master_wallet(master_wallet)
+            api_client.set_master_wallet(master_wallet, payroll_day_int, payroll_time_str)
         except Exception as e:
             return RedirectResponse(url="/constructor?error=Failed to save wallet", status_code=303)
     else:
         # Fallback
         fallback_data["organization"]["ceo"] = {
             "master_wallet": master_wallet,
-            "payroll_frequency": payroll_frequency
+            "payroll_frequency": payroll_frequency,
+            "payroll_day": payroll_day_int,
+            "payroll_time": payroll_time_str
         }
     
     return RedirectResponse(url="/constructor", status_code=303)
@@ -576,6 +615,30 @@ async def update_expense_date(request: Request):
         return JSONResponse({"success": False, "message": str(e)}, status_code=500)
 
 
+@app.post("/api/payroll/execute")
+async def execute_payroll_api(request: Request):
+    """API endpoint for executing payroll"""
+    token = get_token_from_request(request)
+    use_backend = check_backend_available() and token
+    
+    if not use_backend:
+        return JSONResponse({"detail": "Backend not available or not authenticated"}, status_code=401)
+    
+    try:
+        data = await request.json()
+        period_start = data.get("period_start")
+        period_end = data.get("period_end")
+        
+        if not period_start or not period_end:
+            return JSONResponse({"detail": "period_start and period_end are required"}, status_code=400)
+        
+        set_api_token(token)
+        transactions = api_client.execute_payroll(period_start, period_end)
+        return JSONResponse(transactions, status_code=200)
+    except Exception as e:
+        return JSONResponse({"detail": str(e)}, status_code=500)
+
+
 @app.post("/constructor/revenue")
 async def add_revenue(request: Request, month: str = Form(...), amount: str = Form(...)):
     token = get_token_from_request(request)
@@ -653,7 +716,9 @@ async def dashboard(request: Request):
                 
                 company = api_client.get_company()
                 ceo_data = {
-                    "master_wallet": company.get("master_wallet_address", "")
+                    "master_wallet": company.get("master_wallet_address", ""),
+                    "payroll_day": company.get("payroll_day"),
+                    "payroll_time": company.get("payroll_time")
                 } if company.get("master_wallet_address") else None
                 
                 revenues_list = [{"month": f"{r.get('year', '')}-{r.get('month', ''):02d}", "amount": r.get("amount", 0)} for r in revenues]

@@ -59,11 +59,16 @@ class APIClient:
         response.raise_for_status()
         return response.json()
     
-    def set_master_wallet(self, wallet_address: str) -> Dict:
-        """Set master wallet address"""
+    def set_master_wallet(self, wallet_address: str, payroll_day: Optional[int] = None, payroll_time: Optional[str] = None) -> Dict:
+        """Set master wallet address, payroll day and time"""
+        payload = {"master_wallet_address": wallet_address}
+        if payroll_day is not None:
+            payload["payroll_day"] = payroll_day
+        if payroll_time is not None:
+            payload["payroll_time"] = payroll_time
         response = requests.put(
             f"{self.base_url}/company/master-wallet",
-            json={"master_wallet_address": wallet_address},
+            json=payload,
             headers=self._get_headers()
         )
         response.raise_for_status()

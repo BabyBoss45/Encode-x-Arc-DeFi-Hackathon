@@ -15,6 +15,14 @@ router = APIRouter(prefix="/api/auth", tags=["auth"])
 @router.post("/register", response_model=Token)
 async def register(user_data: UserRegister, db: Session = Depends(get_db)):
     """Register a new user"""
+    # Validate password length (bcrypt limit is 72 bytes)
+    password_bytes = user_data.password.encode('utf-8')
+    if len(password_bytes) > 72:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Password is too long (maximum 72 bytes)"
+        )
+    
     # Check if user already exists
     existing_user = db.query(User).filter(User.email == user_data.email).first()
     if existing_user:

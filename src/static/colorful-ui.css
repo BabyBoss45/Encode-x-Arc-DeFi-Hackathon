@@ -1,0 +1,382 @@
+/* Colorful UI - Яркий и понятный интерфейс */
+
+:root {
+    /* Яркие цвета для разных элементов */
+    --color-primary: #2563eb;
+    --color-primary-light: #3b82f6;
+    --color-primary-dark: #1e40af;
+    
+    --color-success: #10b981;
+    --color-success-light: #34d399;
+    --color-success-dark: #059669;
+    
+    --color-warning: #f59e0b;
+    --color-warning-light: #fbbf24;
+    --color-warning-dark: #d97706;
+    
+    --color-danger: #ef4444;
+    --color-danger-light: #f87171;
+    --color-danger-dark: #dc2626;
+    
+    --color-info: #06b6d4;
+    --color-info-light: #22d3ee;
+    --color-info-dark: #0891b2;
+    
+    --color-purple: #8b5cf6;
+    --color-purple-light: #a78bfa;
+    --color-purple-dark: #7c3aed;
+    
+    --color-pink: #ec4899;
+    --color-pink-light: #f472b6;
+    --color-pink-dark: #db2777;
+    
+    --color-orange: #f97316;
+    --color-orange-light: #fb923c;
+    --color-orange-dark: #ea580c;
+    
+    --color-teal: #14b8a6;
+    --color-teal-light: #2dd4bf;
+    --color-teal-dark: #0d9488;
+    
+    /* Градиенты */
+    --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --gradient-success: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    --gradient-warning: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    --gradient-danger: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    --gradient-info: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
+    
+    /* Фоны */
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8fafc;
+    --bg-tertiary: #f1f5f9;
+    --bg-hover: #f1f5f9;
+    
+    /* Текст */
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --text-tertiary: #94a3b8;
+}
+
+/* Стили как на картинке - компактная форма */
+
+/* Улучшенные кнопки с цветами - меньший размер */
+.btn-success {
+    background: var(--gradient-success);
+    color: #ffffff;
+    border: none;
+    box-shadow: 0 4px 8px rgba(16, 185, 129, 0.3), 
+                0 2px 4px rgba(16, 185, 129, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    padding: 0.875rem 1.5rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    border-radius: 1.5rem;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease;
+}
+
+.btn-success:hover {
+    background: var(--color-success-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 12px rgba(16, 185, 129, 0.4), 
+                0 3px 6px rgba(16, 185, 129, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+.btn-success:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(16, 185, 129, 0.3), 
+                0 1px 2px rgba(16, 185, 129, 0.2),
+                inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #ffffff;
+    border: none;
+    outline: none;
+    box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3), 
+                0 2px 4px rgba(102, 126, 234, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    padding: 0.875rem 1.5rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    border-radius: 1.5rem;
+    width: 100%;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-top: 0.5rem;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
+    box-shadow: 0 6px 12px rgba(102, 126, 234, 0.4), 
+                0 3px 6px rgba(102, 126, 234, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    transform: translateY(-1px);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(102, 126, 234, 0.3), 
+                0 1px 2px rgba(102, 126, 234, 0.2),
+                inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.btn-primary:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2),
+                0 4px 8px rgba(102, 126, 234, 0.3);
+}
+
+/* Цветные карточки форм - стиль как на картинке */
+.form-card {
+    background: var(--bg-primary);
+    border: none;
+    border-radius: 1rem;
+    padding: 1.25rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: all 0.2s ease;
+}
+
+.form-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+/* Единый цвет для всех секций - стиль как на картинке */
+.form-section {
+    margin-bottom: 0.75rem;
+    border-radius: 1rem;
+    overflow: hidden;
+    background: var(--bg-primary);
+    border: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: all 0.2s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-section .form-section-toggle {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.form-section:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.form-section-toggle {
+    width: 100%;
+    padding: 1rem 1.25rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #ffffff;
+    border: none;
+    outline: none;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.2s ease;
+    border-radius: 1.5rem;
+    position: relative;
+    box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3), 
+                0 2px 4px rgba(102, 126, 234, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    min-height: 3rem;
+    line-height: 1.5;
+    padding-right: 2.5rem; /* Space for icon */
+}
+
+.form-section-toggle span:first-child {
+    text-align: center;
+    flex: 1;
+    position: absolute;
+    left: 0;
+    right: 0;
+    width: 100%;
+}
+
+.form-section-toggle .toggle-icon {
+    position: absolute;
+    right: 1rem;
+    font-size: 0.75rem;
+    opacity: 0.9;
+    transition: transform 0.3s ease;
+    width: 1rem;
+    text-align: right;
+    flex-shrink: 0;
+}
+
+.form-section-toggle:hover {
+    background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
+    box-shadow: 0 6px 12px rgba(102, 126, 234, 0.4), 
+                0 3px 6px rgba(102, 126, 234, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    transform: translateY(-1px);
+}
+
+.form-section-toggle:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(102, 126, 234, 0.3), 
+                0 1px 2px rgba(102, 126, 234, 0.2),
+                inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.form-section-toggle:focus {
+    outline: none;
+}
+
+/* Все секции одного цвета */
+.form-section .form-section-toggle {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.form-section .form-section-toggle:hover {
+    background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
+}
+
+/* Улучшенные инпуты - стиль как на картинке */
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group:last-of-type {
+    margin-bottom: 1.25rem;
+}
+
+.form-group label {
+    color: var(--text-primary);
+    font-weight: 500;
+    font-size: 0.8125rem;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.form-group input,
+.form-group select {
+    border: 1px solid var(--border-color, #e2e8f0);
+    border-radius: 0.75rem;
+    padding: 0.625rem 0.875rem;
+    font-size: 0.8125rem;
+    transition: all 0.2s ease;
+    background: var(--bg-primary);
+    width: 100%;
+    color: var(--text-primary);
+}
+
+.form-group input:hover,
+.form-group select:hover {
+    border-color: var(--border-color-dark, #cbd5e1);
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+    background: #ffffff;
+}
+
+.form-group input::placeholder {
+    color: var(--text-tertiary, #94a3b8);
+}
+
+.form-group small {
+    display: block;
+    margin-top: 0.25rem;
+    color: var(--text-secondary);
+    font-size: 0.7rem;
+    line-height: 1.4;
+}
+
+/* Иконки и эмодзи */
+.toggle-icon {
+    transition: transform 0.3s ease;
+    font-size: 0.875rem;
+}
+
+.form-section[data-open="true"] .toggle-icon {
+    transform: rotate(180deg);
+}
+
+/* Анимации */
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.7;
+    }
+}
+
+.btn-payroll:disabled {
+    animation: pulse 2s infinite;
+}
+
+/* Улучшенные цвета для статистики */
+.stat-card[data-icon="workers"] {
+    border-left: 4px solid var(--color-primary);
+}
+
+.stat-card[data-icon="departments"] {
+    border-left: 4px solid var(--color-success);
+}
+
+.stat-card[data-icon="revenue"] {
+    border-left: 4px solid var(--color-success);
+}
+
+.stat-card[data-icon="expenses"] {
+    border-left: 4px solid var(--color-danger);
+}
+
+.stat-card[data-icon="profit"] {
+    border-left: 4px solid var(--color-info);
+}
+
+.stat-card[data-icon="wallet"] {
+    border-left: 4px solid var(--color-purple);
+}
+
+/* Revenue секция - шире */
+.right-panel {
+    min-width: 400px;
+    max-width: 500px;
+}
+
+.revenue-section {
+    width: 100%;
+    min-width: 350px;
+}
+
+.revenue-list {
+    width: 100%;
+}
+
+.revenue-list li {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .payroll-execution-section {
+        padding: 1rem;
+    }
+    
+    .payroll-form {
+        padding: 1rem;
+    }
+    
+    .right-panel {
+        min-width: 100%;
+        max-width: 100%;
+    }
+}
+

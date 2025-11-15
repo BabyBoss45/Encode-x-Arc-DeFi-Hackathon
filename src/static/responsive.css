@@ -1,0 +1,155 @@
+/* Responsive Web Scale Styles */
+
+/* Убрать обводки у кнопок слева */
+.left-panel .form-section-toggle {
+    border: none !important;
+    outline: none !important;
+}
+
+.left-panel .form-section {
+    border: 1.5px solid var(--border-color, #e2e8f0) !important;
+}
+
+.left-panel .form-section:hover {
+    border-color: var(--color-primary) !important;
+}
+
+/* Левая панель - шире для форм */
+.left-panel {
+    min-width: 350px !important;
+    max-width: 400px !important;
+}
+
+.form-card {
+    min-width: 100%;
+}
+
+/* Revenue - сделать меньше и не упиралась в край */
+.right-panel {
+    max-width: 380px !important;
+    padding-right: 1rem;
+}
+
+.revenue-section {
+    max-width: 100% !important;
+    padding: 1.5rem !important;
+    margin-right: 0 !important;
+}
+
+.revenue-list {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+.revenue-list li {
+    max-width: 100%;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+/* Responsive для мобильных */
+@media (max-width: 1400px) {
+    .constructor-layout {
+        grid-template-columns: 320px 1fr 350px !important;
+        gap: 1.5rem;
+        padding: 2rem;
+    }
+    
+    .left-panel {
+        min-width: 320px !important;
+        max-width: 350px !important;
+    }
+    
+    .right-panel {
+        max-width: 350px !important;
+    }
+}
+
+@media (max-width: 1200px) {
+    .constructor-layout {
+        grid-template-columns: 300px 1fr 280px !important;
+        gap: 1rem;
+        padding: 1.5rem;
+    }
+    
+    .left-panel {
+        min-width: 300px !important;
+        max-width: 320px !important;
+    }
+    
+    .right-panel {
+        max-width: 280px !important;
+    }
+    
+    .revenue-section {
+        padding: 1.25rem !important;
+    }
+}
+
+@media (max-width: 1024px) {
+    .constructor-layout {
+        grid-template-columns: 1fr !important;
+        gap: 1rem;
+        padding: 1rem;
+    }
+    
+    .left-panel,
+    .right-panel {
+        max-width: 100% !important;
+        width: 100%;
+    }
+    
+    .revenue-section {
+        position: relative !important;
+        top: 0 !important;
+        max-width: 100% !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .constructor-layout {
+        padding: 0.75rem;
+    }
+    
+    .form-section-toggle {
+        padding: 0.5rem 0.75rem !important;
+        font-size: 0.75rem !important;
+    }
+    
+    .form-card {
+        padding: 0.75rem !important;
+    }
+    
+    .revenue-section {
+        padding: 1rem !important;
+    }
+    
+    .revenue-list li {
+        padding: 0.625rem 0.875rem !important;
+        font-size: 0.8125rem !important;
+    }
+}
+
+/* Viewport meta для правильного масштабирования */
+html {
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+}
+
+body {
+    overflow-x: hidden;
+    max-width: 100vw;
+}
+
+/* Улучшенные отступы для revenue */
+.revenue-section h2,
+.revenue-section h3 {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+.revenue-list ul {
+    padding-right: 0;
+    margin-right: 0;
+}
+

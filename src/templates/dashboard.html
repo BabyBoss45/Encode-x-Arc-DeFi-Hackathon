@@ -2,10 +2,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <title>ARC budget - Dashboard</title>
     <link rel="stylesheet" href="/static/futuristic.css">
+    <link rel="stylesheet" href="/static/superoffice-style.css">
+    <link rel="stylesheet" href="/static/colorful-ui.css">
+    <link rel="stylesheet" href="/static/responsive.css">
+    <link rel="stylesheet" href="/static/datepicker.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="/static/datepicker.js"></script>
 </head>
 <body>
     <div class="dashboard-container">
@@ -33,9 +38,9 @@
                             <h2 class="card-title">Expenses by Month</h2>
                             <div class="date-picker-container">
                                 <label for="startMonth">From:</label>
-                                <input type="month" id="startMonth" class="date-input">
+                                <input type="date" id="startMonth" class="date-input datepicker" placeholder="Select start date">
                                 <label for="endMonth">To:</label>
-                                <input type="month" id="endMonth" class="date-input">
+                                <input type="date" id="endMonth" class="date-input datepicker" placeholder="Select end date">
                                 <button id="updateChart" class="btn btn-primary btn-small">Update</button>
                             </div>
                         </div>
@@ -257,8 +262,8 @@
         window.updateExpensesChart = function(chartData) {
             if (!expensesChart) return;
             
-            const startMonth = document.getElementById('startMonth')?.value;
-            const endMonth = document.getElementById('endMonth')?.value;
+            const startDate = document.getElementById('startMonth')?.value;
+            const endDate = document.getElementById('endMonth')?.value;
             
             // Group expenses by month
             const expensesByMonth = {};
@@ -274,9 +279,10 @@
                     monthKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
                 }
                 
-                // Filter by date range if specified
-                if (startMonth && endMonth) {
-                    if (monthKey < startMonth || monthKey > endMonth) {
+                // Filter by date range if specified (compare full dates)
+                if (startDate && endDate && expense.date) {
+                    const expenseDate = expense.date;
+                    if (expenseDate < startDate || expenseDate > endDate) {
                         return; // Skip this expense if outside range
                     }
                 }
@@ -393,31 +399,41 @@
 
             // Date picker functionality
             document.getElementById('updateChart').addEventListener('click', function() {
-                const startMonth = document.getElementById('startMonth').value;
-                const endMonth = document.getElementById('endMonth').value;
+                const startDate = document.getElementById('startMonth').value;
+                const endDate = document.getElementById('endMonth').value;
                 
-                if (startMonth && endMonth) {
+                if (startDate && endDate) {
                     // Get current expenses data (from global expensesDataForChart)
                     const currentData = window.expensesDataForChart || dataToUse;
                     if (typeof window.updateExpensesChart === 'function') {
                         window.updateExpensesChart(currentData);
                     }
                 } else {
-                    alert('Please select both start and end months');
+                    alert('Please select both start and end dates');
                 }
             });
 
-            // Set default months (last 6 months)
+            // Set default dates (last 6 months)
             const today = new Date();
             const sixMonthsAgo = new Date(today);
             sixMonthsAgo.setMonth(today.getMonth() - 6);
             
-            const formatMonthInput = (date) => {
-                return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+            const formatDateInput = (date) => {
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const day = String(date.getDate()).padStart(2, '0');
+                return `${year}-${month}-${day}`;
             };
             
-                    document.getElementById('endMonth').value = formatMonthInput(today);
-                    document.getElementById('startMonth').value = formatMonthInput(sixMonthsAgo);
+            // Set default values after date pickers are initialized
+            setTimeout(() => {
+                const startInput = document.getElementById('startMonth');
+                const endInput = document.getElementById('endMonth');
+                if (startInput && endInput) {
+                    startInput.value = formatDateInput(sixMonthsAgo);
+                    endInput.value = formatDateInput(today);
+                }
+            }, 100);
                 }
                 
                 // Align bottom borders: pie chart card with Master Wallet card
@@ -609,7 +625,7 @@
                         </div>
                         <div class="modal-form-group">
                             <label for="editExpenseDate">Date:</label>
-                            <input type="date" id="editExpenseDate" class="modal-form-input" required>
+                            <input type="date" id="editExpenseDate" class="modal-form-input datepicker" required placeholder="Select date">
                         </div>
                         <input type="hidden" id="editExpenseIndex" value="-1">
                         <div class="modal-form-actions">

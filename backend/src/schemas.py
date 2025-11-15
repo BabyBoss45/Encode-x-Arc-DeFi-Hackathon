@@ -26,11 +26,15 @@ class Token(BaseModel):
 # Company schemas
 class CompanyCreate(BaseModel):
     master_wallet_address: str
+    payroll_day: Optional[int] = None  # Day of month for payroll (1-31)
+    payroll_time: Optional[str] = None  # Time for payroll (HH:MM format, e.g., "09:00")
 
 
 class CompanyResponse(BaseModel):
     id: int
     master_wallet_address: Optional[str]
+    payroll_day: Optional[int]
+    payroll_time: Optional[str]
     created_at: datetime
     
     class Config:
